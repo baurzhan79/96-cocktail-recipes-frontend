@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Typography, Grid, Button } from "@mui/material";
 
 import { getCocktails } from "../../store/actions/cocktailsActions";
+import CocktailItem from "./CocktailItem";
 
 const Cocktails = ({ user }) => {
     const dispatch = useDispatch();
@@ -31,6 +32,19 @@ const Cocktails = ({ user }) => {
                         </Button>
                     </Grid>
                 }
+
+                <Grid item container direction="row" spacing={1}>
+                    {cocktails.map(cocktail => (
+                        <CocktailItem
+                            key={cocktail._id}
+                            id={cocktail._id}
+                            title={cocktail.title}
+                            image={cocktail.image}
+                            published={cocktail.published}
+                            author={cocktail.user.displayName}
+                        />
+                    ))}
+                </Grid>
             </Grid>
         </Grid>
     )
