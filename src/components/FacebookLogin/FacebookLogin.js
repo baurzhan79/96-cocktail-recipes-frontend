@@ -7,7 +7,7 @@ import { Button } from "@mui/material";
 import { facebookAppId } from "../../config";
 import { facebookLogin } from "../../store/actions/usersActions";
 
-const FacebookLogin = () => {
+const FacebookLoginComponent = () => {
     const dispatch = useDispatch();
 
     const facebookResponse = response => {
@@ -33,4 +33,4 @@ const FacebookLogin = () => {
     )
 }
 
-export default FacebookLogin
+export default FacebookLoginComponent

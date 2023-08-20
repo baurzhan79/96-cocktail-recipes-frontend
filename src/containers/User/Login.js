@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { CssBaseline, Container } from "@mui/material";
 
-import FacebookLogin from "../../components/FacebookLogin/FacebookLogin";
+import FacebookLoginComponent from "../../components/FacebookLogin/FacebookLogin";
 
 const Login = ({ isAllowed }) => {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ const Login = ({ isAllowed }) => {
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <FacebookLogin />
+            <FacebookLoginComponent />
         </Container>
     );
 }
