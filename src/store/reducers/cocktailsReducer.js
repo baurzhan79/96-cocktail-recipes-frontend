@@ -1,13 +1,25 @@
-import { GET_COCKTAILS_SUCCESS } from "../actionTypes";
+import { COCKTAILS_REQUEST, COCKTAILS_SUCCESS, COCKTAILS_ERROR, GET_COCKTAIL_SUCCESS } from "../actionTypes";
 
 const initialState = {
-    cocktails: []
+    loading: false,
+    error: null,
+    cocktails: [],
+    selectedCocktail: null
 };
 
 const cocktailsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_COCKTAILS_SUCCESS:
-            return { ...state, cocktails: action.cocktails };
+        case COCKTAILS_REQUEST:
+            return { ...state, loading: true, selectedCocktail: null }
+
+        case COCKTAILS_SUCCESS:
+            return { ...state, loading: false, cocktails: action.responseItems, error: null }
+
+        case COCKTAILS_ERROR:
+            return { ...state, loading: false, error: action.error }
+
+        case GET_COCKTAIL_SUCCESS:
+            return { ...state, loading: false, selectedCocktail: action.responseItem }
 
         default:
             return state;

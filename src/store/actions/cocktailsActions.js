@@ -1,31 +1,70 @@
-import axiosApi from "../../axiosApi";
+import axios from "../../axiosApi";
 import { push } from "connected-react-router";
 
-import { GET_COCKTAILS_SUCCESS, CREATE_COCKTAIL_SUCCESS } from "../actionTypes";
+import { COCKTAILS_REQUEST, COCKTAILS_SUCCESS, COCKTAILS_ERROR, GET_COCKTAIL_SUCCESS } from "../actionTypes";
 
-export const getCocktailsSuccess = cocktails => {
-    return { type: GET_COCKTAILS_SUCCESS, cocktails };
-};
+export const cocktailsRequest = () => (
+    { type: COCKTAILS_REQUEST }
+);
 
-export const getCocktails = () => {
-    return dispatch => {
-        return axiosApi.get("/cocktails").then(
-            response => {
-                dispatch(getCocktailsSuccess(response.data))
-            }
-        );
-    };
-};
+export const cocktailsSuccess = responseItems => (
+    { type: COCKTAILS_SUCCESS, responseItems }
+);
 
-export const createCocktailSuccess = () => {
-    return { type: CREATE_COCKTAIL_SUCCESS };
-};
+export const cocktailsError = (error) => (
+    { type: COCKTAILS_ERROR, error }
+);
 
-export const createCocktail = cocktailData => {
+export const getCocktailSuccess = responseItem => (
+    { type: GET_COCKTAIL_SUCCESS, responseItem }
+);
+
+export const cocktailsGetItems = () => {
     return async dispatch => {
-        await axiosApi.post("/cocktails", cocktailData);
-        dispatch(createCocktailSuccess());
-        dispatch(push("/"));
-        window.location.reload();
-    };
+        dispatch(cocktailsRequest());
+        try {
+            const response = await axios.get("/cocktails");
+            let items = [];
+            if (response.status === 200) { // OK
+                if (response.data !== null) {
+                    items = [...response.data];
+                }
+            }
+            dispatch(cocktailsSuccess(items));
+
+        } catch (error) {
+            dispatch(cocktailsError(error));
+        }
+    }
+};
+
+export const addNewCocktail = (cocktail, userToken) => {
+    return async dispatch => {
+        dispatch(cocktailsRequest());
+        try {
+            await axios.post("/cocktails", cocktail, { headers: { Authorization: userToken } });
+            dispatch(push("/"));
+            window.location.reload();
+
+        } catch (error) {
+            dispatch(cocktailsError(error));
+        }
+    }
+};
+
+export const getCocktail = id => {
+    return async dispatch => {
+        dispatch(cocktailsRequest());
+        try {
+            const response = await axios.get(`/cocktails/${id}`);
+            if (response.status === 200) { // OK
+                if (response.data !== null) {
+                    dispatch(getCocktailSuccess(response.data));
+                }
+            }
+
+        } catch (error) {
+            dispatch(cocktailsError(error));
+        }
+    }
 };
