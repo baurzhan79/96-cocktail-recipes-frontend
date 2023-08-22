@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { Typography, Grid, Button } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 
-import { cocktailsGetItems } from "../../store/actions/cocktailsActions";
+import { userCocktailsGetItems } from "../../store/actions/cocktailsActions";
 import CocktailItem from "./CocktailItem";
 import Spinner from "../../components/UI/Spinner/Spinner";
 
-const Cocktails = ({ user }) => {
+const UserCocktails = ({ user }) => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { cocktails, loading, error } = useSelector(state => state.cocktails, shallowEqual);
+    useEffect(() => {
+        if (user === null) navigate("/");
+    }, [user, navigate]);
+
+    const { userCocktails, loading, error } = useSelector(state => state.cocktails, shallowEqual);
 
     useEffect(() => {
-        dispatch(cocktailsGetItems());
+        dispatch(userCocktailsGetItems(user._id));
     }, [dispatch]);
 
     useEffect(() => {
@@ -22,8 +27,8 @@ const Cocktails = ({ user }) => {
     }, [error]);
 
     useEffect(() => {
-        console.log("cocktails", cocktails);
-    }, [cocktails]);
+        console.log("userCocktails", userCocktails);
+    }, [userCocktails]);
 
 
     // =========================================================
@@ -34,19 +39,12 @@ const Cocktails = ({ user }) => {
                 <Grid item container direction="row" justify="space-between" alignItems="center" spacing={2}>
                     <Grid item>
                         <Typography variant="h4">
-                            All cocktails
+                            My cocktails
                         </Typography>
                     </Grid>
-                    {
-                        user && <Grid item>
-                            <Button variant="contained" component={Link} to="/cocktails/add-cocktail">
-                                Add new cocktail
-                            </Button>
-                        </Grid>
-                    }
 
                     <Grid item container direction="row" spacing={1}>
-                        {cocktails.map(cocktail => (
+                        {userCocktails.map(cocktail => (
                             <CocktailItem
                                 key={cocktail._id}
                                 id={cocktail._id}
@@ -62,4 +60,4 @@ const Cocktails = ({ user }) => {
         )
 }
 
-export default Cocktails
+export default UserCocktails

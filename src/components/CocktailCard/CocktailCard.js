@@ -24,10 +24,14 @@ const Img = styled('img')({
     maxHeight: '100%',
 });
 
-const CocktailCard = () => {
+const CocktailCard = ({ user }) => {
     const params = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user === null) navigate("/");
+    }, [user, navigate]);
 
     useEffect(() => {
         if (params.cocktailId !== undefined) dispatch(getCocktail(params.cocktailId));

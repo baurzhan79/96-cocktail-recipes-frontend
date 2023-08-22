@@ -1,10 +1,13 @@
-import { COCKTAILS_REQUEST, COCKTAILS_SUCCESS, COCKTAILS_ERROR, GET_COCKTAIL_SUCCESS } from "../actionTypes";
+import {
+    COCKTAILS_REQUEST, COCKTAILS_SUCCESS, COCKTAILS_ERROR, GET_COCKTAIL_SUCCESS, GET_USER_COCKTAILS_SUCCESS
+} from "../actionTypes";
 
 const initialState = {
     loading: false,
     error: null,
     cocktails: [],
-    selectedCocktail: null
+    selectedCocktail: null,
+    userCocktails: []
 };
 
 const cocktailsReducer = (state = initialState, action) => {
@@ -20,6 +23,9 @@ const cocktailsReducer = (state = initialState, action) => {
 
         case GET_COCKTAIL_SUCCESS:
             return { ...state, loading: false, selectedCocktail: action.responseItem }
+
+        case GET_USER_COCKTAILS_SUCCESS:
+            return { ...state, loading: false, userCocktails: action.responseItems, error: null }
 
         default:
             return state;

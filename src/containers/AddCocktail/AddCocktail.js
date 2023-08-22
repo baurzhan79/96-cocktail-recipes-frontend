@@ -103,8 +103,6 @@ const AddCocktail = ({ user }) => {
     }
 
     const createCocktailHandler = async () => {
-        console.log("create cocktail button clicked");
-
         const formData = new FormData();
         formData.append("user", user._id);
         formData.append("title", cocktailState.name);
