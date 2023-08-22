@@ -78,9 +78,9 @@ const CocktailCard = () => {
                         </Typography>
                         <Typography variant="h6">
                             <ul className={classes.ul}>
-                                {ingredients.map(ingredient => (
-                                    <li>
-                                        {ingredient.name} - {ingredient.count}
+                                {ingredients.map((ingredient, index) => (
+                                    <li key={index}>
+                                        {ingredient.name} - {ingredient.amount}
                                     </li>
                                 ))}
                             </ul>
