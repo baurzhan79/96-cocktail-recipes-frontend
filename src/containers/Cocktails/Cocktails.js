@@ -21,10 +21,6 @@ const Cocktails = ({ user }) => {
         if (error !== null) console.log("Error with request: ", error);
     }, [error]);
 
-    useEffect(() => {
-        console.log("cocktails", cocktails);
-    }, [cocktails]);
-
 
     // =========================================================
     if (loading) return (<Spinner />);
@@ -46,16 +42,25 @@ const Cocktails = ({ user }) => {
                     }
 
                     <Grid item container direction="row" spacing={1}>
-                        {cocktails.map(cocktail => (
-                            <CocktailItem
-                                key={cocktail._id}
-                                id={cocktail._id}
-                                title={cocktail.title}
-                                image={cocktail.image}
-                                published={cocktail.published}
-                                author={cocktail.user.displayName}
-                            />
-                        ))}
+                        {cocktails.map(cocktail => {
+                            if (user !== null) {
+                                if (user.role !== "admin" && !cocktail.published) {
+                                    return null;
+                                }
+
+                                return (
+                                    <CocktailItem
+                                        key={cocktail._id}
+                                        id={cocktail._id}
+                                        title={cocktail.title}
+                                        image={cocktail.image}
+                                        published={cocktail.published}
+                                        author={cocktail.user.displayName}
+                                        user={user}
+                                    />
+                                )
+                            }
+                        })}
                     </Grid>
                 </Grid>
             </Grid>

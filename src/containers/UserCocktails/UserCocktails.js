@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Typography, Grid } from "@mui/material";
 
 import { userCocktailsGetItems } from "../../store/actions/cocktailsActions";
-import CocktailItem from "./CocktailItem";
+import UserCocktailItem from "./UserCocktailItem";
 import Spinner from "../../components/UI/Spinner/Spinner";
 
 const UserCocktails = ({ user }) => {
@@ -20,15 +20,11 @@ const UserCocktails = ({ user }) => {
 
     useEffect(() => {
         dispatch(userCocktailsGetItems(user._id));
-    }, [dispatch]);
+    }, [dispatch, user._id]);
 
     useEffect(() => {
         if (error !== null) console.log("Error with request: ", error);
     }, [error]);
-
-    useEffect(() => {
-        console.log("userCocktails", userCocktails);
-    }, [userCocktails]);
 
 
     // =========================================================
@@ -45,7 +41,7 @@ const UserCocktails = ({ user }) => {
 
                     <Grid item container direction="row" spacing={1}>
                         {userCocktails.map(cocktail => (
-                            <CocktailItem
+                            <UserCocktailItem
                                 key={cocktail._id}
                                 id={cocktail._id}
                                 title={cocktail.title}

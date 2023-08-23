@@ -13,7 +13,7 @@ const initialState = {
 const cocktailsReducer = (state = initialState, action) => {
     switch (action.type) {
         case COCKTAILS_REQUEST:
-            return { ...state, loading: true, selectedCocktail: null }
+            return { ...state, loading: true, selectedCocktail: null, error: null }
 
         case COCKTAILS_SUCCESS:
             return { ...state, loading: false, cocktails: action.responseItems, error: null }

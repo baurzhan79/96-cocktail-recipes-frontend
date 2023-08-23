@@ -1,5 +1,4 @@
 import axios from "../../axiosApi";
-import { push } from "connected-react-router";
 
 import {
     COCKTAILS_REQUEST, COCKTAILS_SUCCESS, COCKTAILS_ERROR, GET_COCKTAIL_SUCCESS, GET_USER_COCKTAILS_SUCCESS
@@ -68,8 +67,6 @@ export const addNewCocktail = (cocktail, userToken) => {
         dispatch(cocktailsRequest());
         try {
             await axios.post("/cocktails", cocktail, { headers: { Authorization: userToken } });
-            dispatch(push("/"));
-            window.location.reload();
 
         } catch (error) {
             dispatch(cocktailsError(error));
@@ -88,6 +85,30 @@ export const getCocktail = id => {
                 }
             }
 
+        } catch (error) {
+            dispatch(cocktailsError(error));
+        }
+    }
+};
+
+export const deleteCocktail = id => {
+    return async dispatch => {
+        dispatch(cocktailsRequest());
+        try {
+            await axios.delete(`/cocktails/${id}`);
+            dispatch(cocktailsGetItems());
+        } catch (error) {
+            dispatch(cocktailsError(error));
+        }
+    }
+};
+
+export const publishCocktail = id => {
+    return async dispatch => {
+        dispatch(cocktailsRequest());
+        try {
+            await axios.put(`/cocktails/${id}`);
+            dispatch(cocktailsGetItems());
         } catch (error) {
             dispatch(cocktailsError(error));
         }

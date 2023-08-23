@@ -50,7 +50,6 @@ const CocktailCard = ({ user }) => {
     const [ingredients, setIngredients] = useState([]);
 
     useEffect(() => {
-        console.log("selectedCocktail", selectedCocktail);
         if (selectedCocktail !== null) {
             const ingredientsCocktail = JSON.parse(selectedCocktail.ingredients);
             setIngredients(ingredientsCocktail);

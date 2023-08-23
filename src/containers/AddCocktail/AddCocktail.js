@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Grid, Typography, TextField, InputLabel, Box, Button, IconButton } from "@mui/material";
@@ -102,6 +102,8 @@ const AddCocktail = ({ user }) => {
         setCocktailState(stateCopy);
     }
 
+    const errorOnAdd = useSelector(state => state.cocktails.error);
+
     const createCocktailHandler = async () => {
         const formData = new FormData();
         formData.append("user", user._id);
@@ -115,7 +117,7 @@ const AddCocktail = ({ user }) => {
         formData.append("ingredients", JSON.stringify(ingredients));
 
         await dispatch(addNewCocktail(formData, user.token));
-        navigate("/");
+        if (errorOnAdd === null) navigate("/");
     }
 
     const classes = useStyles();

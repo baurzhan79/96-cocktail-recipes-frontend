@@ -5,7 +5,7 @@ import Login from "./containers/User/Login";
 import Cocktails from "./containers/Cocktails/Cocktails";
 import CocktailCard from "./components/CocktailCard/CocktailCard";
 import AddCocktail from "./containers/AddCocktail/AddCocktail";
-import UserCocktails from "./containers/Cocktails/UserCocktails";
+import UserCocktails from "./containers/UserCocktails/UserCocktails";
 
 const AllRoutes = ({ user }) => {
     return (

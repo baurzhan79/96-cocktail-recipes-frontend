@@ -1,20 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import {
-    Grid, Card, CardHeader, CardContent, CardActions, IconButton, CardMedia, Typography, Button
+    Grid, Card, CardHeader, CardContent, CardActions, IconButton, CardMedia, Typography
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import DeleteIcon from "@mui/icons-material/Delete";
 import PropTypes from "prop-types";
 
 import imageNotAvailable from "../../assets/images/image_not_available.png";
 import { apiURL } from "../../config";
-
-import { deleteCocktail, publishCocktail } from "../../store/actions/cocktailsActions";
 
 const useStyles = makeStyles({
     card: {
@@ -29,21 +25,11 @@ const useStyles = makeStyles({
     },
 });
 
-const CocktailItem = ({ id, title, image, published, author, user }) => {
+const UserCocktailItem = ({ id, title, image, published, author }) => {
     const classes = useStyles();
     let cardImage = imageNotAvailable;
     if (image) {
         cardImage = apiURL + "/uploads/" + image;
-    }
-
-    const dispatch = useDispatch();
-
-    const deleteCocktailHandler = () => {
-        dispatch(deleteCocktail(id));
-    }
-
-    const publishHandler = () => {
-        dispatch(publishCocktail(id));
     }
 
     return (
@@ -59,19 +45,6 @@ const CocktailItem = ({ id, title, image, published, author, user }) => {
                     <strong>
                         status: {published ? "Published" : "Unpublished"}
                     </strong>
-                    {
-                        (!published && user.role === "admin") ?
-                            <Button
-                                sx={{ mx: 2 }}
-                                variant="outlined"
-                                size="small"
-                                onClick={publishHandler}
-                            >
-                                Publish
-                            </Button>
-                            : null
-                    }
-
                     <Typography className={classes.pos} color="textSecondary">
                         author: {author}
                     </Typography>
@@ -80,20 +53,13 @@ const CocktailItem = ({ id, title, image, published, author, user }) => {
                     <IconButton component={Link} to={"/cocktails/" + id}>
                         <ArrowForwardIcon />
                     </IconButton>
-                    {
-                        user.role === "admin" ?
-                            <IconButton onClick={deleteCocktailHandler}>
-                                <DeleteIcon />
-                            </IconButton>
-                            : null
-                    }
                 </CardActions>
             </Card>
         </Grid>
     );
 };
 
-CocktailItem.propTypes = {
+UserCocktailItem.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     published: PropTypes.bool.isRequired,
@@ -101,4 +67,4 @@ CocktailItem.propTypes = {
     author: PropTypes.string
 };
 
-export default CocktailItem;
+export default UserCocktailItem;
