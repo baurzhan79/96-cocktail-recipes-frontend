@@ -20,7 +20,7 @@ const UserCocktails = ({ user }) => {
 
     useEffect(() => {
         dispatch(userCocktailsGetItems(user._id));
-    }, [dispatch, user._id]);
+    }, [dispatch]);
 
     useEffect(() => {
         if (error !== null) console.log("Error with request: ", error);

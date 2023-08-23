@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Button, Menu, MenuItem, Avatar } from "@mui/material";
 
+import { apiURL } from "../../../../config";
 import { logoutUser } from "../../../../store/actions/usersActions";
 
 const UserMenu = ({ user }) => {
@@ -31,6 +32,7 @@ const UserMenu = ({ user }) => {
 
     return (
         <>
+            <Avatar alt={user.displayName} src={apiURL + "/uploads/" + user.avatar} />
             <Button
                 aria-controls="simple-menu"
                 aria-haspopup="true"
