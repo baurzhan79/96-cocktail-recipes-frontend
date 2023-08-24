@@ -107,8 +107,20 @@ export const publishCocktail = id => {
     return async dispatch => {
         dispatch(cocktailsRequest());
         try {
-            await axios.put(`/cocktails/${id}`);
+            await axios.put(`/cocktails/${id}`, { published: true });
             dispatch(cocktailsGetItems());
+        } catch (error) {
+            dispatch(cocktailsError(error));
+        }
+    }
+};
+
+export const updateCocktail = (id, newRatings) => {
+    return async dispatch => {
+        dispatch(cocktailsRequest());
+        try {
+            await axios.put(`/cocktails/${id}`, { ratings: JSON.stringify(newRatings) });
+            dispatch(getCocktail(id));
         } catch (error) {
             dispatch(cocktailsError(error));
         }

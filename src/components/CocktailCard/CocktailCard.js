@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Rating } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 
 import imageNotAvailable from "../../assets/images/image_not_available.png";
 import { apiURL } from "../../config";
-import { getCocktail } from "../../store/actions/cocktailsActions";
+import { getCocktail, updateCocktail } from "../../store/actions/cocktailsActions";
 import Spinner from "../UI/Spinner/Spinner";
 
 const useStyles = makeStyles({
@@ -48,13 +48,61 @@ const CocktailCard = ({ user }) => {
 
 
     const [ingredients, setIngredients] = useState([]);
+    const [ratings, setRatings] = useState([]);
+    const [avgRating, setAvgRating] = useState(0);
+    const [userRating, setUserRating] = useState(0);
+    const [isChangedUserRating, setIsChangedUserRating] = useState(false);
 
     useEffect(() => {
         if (selectedCocktail !== null) {
             const ingredientsCocktail = JSON.parse(selectedCocktail.ingredients);
             setIngredients(ingredientsCocktail);
+
+            const ratingsCocktail = JSON.parse(selectedCocktail.ratings);
+            setRatings(ratingsCocktail);
         }
     }, [selectedCocktail]);
+
+    useEffect(() => {
+        if (ratings.length > 0) {
+            const ratingsSum = ratings.reduce((sum, currentItem) => {
+                if (currentItem.user === user._id) setUserRating(currentItem.rating);
+                return sum + currentItem.rating;
+            }, 0);
+
+            let result = ratingsSum / ratings.length;
+            result = Math.round(result * 10) / 10;
+            setAvgRating(result);
+        }
+        else setAvgRating(0);
+    }, [ratings]);
+
+    useEffect(() => {
+        if (userRating > 0 && isChangedUserRating) {
+            const filteredArray = ratings.filter(item => {
+                return item.user === user._id;
+            });
+
+            const newRatings = [...ratings];
+
+            if (filteredArray.length === 1) {
+                newRatings.forEach(element => {
+                    if (element.user === user._id) element.rating = userRating;
+                });
+            }
+            else {
+                newRatings.push(
+                    {
+                        user: user._id,
+                        rating: userRating
+                    }
+                );
+            }
+
+            dispatch(updateCocktail(selectedCocktail._id, newRatings));
+            setIsChangedUserRating(false);
+        }
+    }, [userRating]);
 
 
     const classes = useStyles();
@@ -76,6 +124,15 @@ const CocktailCard = ({ user }) => {
                         <Typography variant="h4">
                             {selectedCocktail.title}
                         </Typography>
+
+                        {
+                            ratings.length > 0 ?
+                                <Typography variant="h5">
+                                    Ratings: {avgRating} ({ratings.length} {ratings.length > 1 ? "votes" : "vote"})
+                                </Typography>
+                                : null
+                        }
+
                         <Typography variant="h5">
                             Ingredients:
                         </Typography>
@@ -98,6 +155,20 @@ const CocktailCard = ({ user }) => {
                     <Typography variant="body1">
                         {selectedCocktail.recipe}
                     </Typography>
+                </Grid>
+
+                <Grid item sx={{ my: 2 }}>
+                    <Typography component="legend">Rate</Typography>
+                    <Rating
+                        name="userRating"
+                        value={userRating}
+                        onChange={(event, newValue) => {
+                            if (newValue > 0) {
+                                setUserRating(newValue);
+                                setIsChangedUserRating(true);
+                            }
+                        }}
+                    />
                 </Grid>
             </Grid>
         );

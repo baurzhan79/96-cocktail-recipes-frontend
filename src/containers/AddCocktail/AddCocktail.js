@@ -115,6 +115,7 @@ const AddCocktail = ({ user }) => {
         const stateCopy = { ...cocktailState };
         const ingredients = [...stateCopy.ingredients];
         formData.append("ingredients", JSON.stringify(ingredients));
+        formData.append("ratings", JSON.stringify([]));
 
         await dispatch(addNewCocktail(formData, user.token));
         if (errorOnAdd === null) navigate("/");
