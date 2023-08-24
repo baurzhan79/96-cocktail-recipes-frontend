@@ -117,10 +117,10 @@ const CocktailCard = ({ user }) => {
         return (
             <Grid container direction="column" spacing={2}>
                 <Grid item container direction="row" justify="space-between" alignItems="center" spacing={2}>
-                    <Grid item>
+                    <Grid item sm={6}>
                         <Img alt="cocktail image" src={cardImage} />
                     </Grid>
-                    <Grid item>
+                    <Grid item sm={6}>
                         <Typography variant="h4">
                             {selectedCocktail.title}
                         </Typography>
